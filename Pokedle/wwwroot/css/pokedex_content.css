@@ -1,0 +1,154 @@
+﻿.pokedex-content {
+    background: rgba(255,255,255,.4);
+    height: 100%;
+    flex: 1;
+    overflow-y: auto;
+}
+
+/* Guess grid layout */
+.guess-grid {
+    display: grid;
+    grid-template-columns: 1.6fr repeat(8, minmax(0, 1fr));
+    gap: 8px;
+    margin-bottom: 12px;
+}
+
+/* Guess Grid Header */
+.header {
+    font-weight: bold;
+    color: black;
+    text-align: center;
+    margin-bottom: 12px;
+}
+
+    .header > div {
+        padding: 6px;
+    }
+
+/* Guess Grid Tíle */
+.guess-tile {
+    width: 100%;
+    height: 72px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    border-radius: 12px;
+    overflow: hidden;
+    transition: transform .15s ease;
+}
+
+    .guess-tile:hover {
+        transform: translateY(-2px) !important;
+    }
+
+    .guess-tile .mud-typography {
+        font-size: clamp(.65rem, .9vw, 1rem);
+        line-height: 1.1;
+        overflow-wrap: anywhere;
+    }
+
+.correct {
+    background: #4CAF50 !important;
+    color: white !important;
+}
+
+.partial {
+    background: #FB8C00 !important;
+    color: white !important;
+}
+
+.wrong {
+    background: #E53935 !important;
+    color: white !important;
+}
+
+/* Animation for guess row */
+.guess-result-enter {
+    animation: pokedex-row-enter .45s ease-out forwards;
+    transform-origin: top;
+}
+
+@keyframes pokedex-row-enter {
+    from {
+        opacity: 0;
+        transform: translateY(-25px) scale(.98);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+.guess-result-enter .guess-tile {
+    opacity: 0;
+    animation: pokedex-cell-scan .25s ease-out forwards;
+}
+
+
+    .guess-result-enter .guess-tile:nth-child(1) {
+        animation-delay: .05s;
+    }
+
+    .guess-result-enter .guess-tile:nth-child(2) {
+        animation-delay: .10s;
+    }
+
+    .guess-result-enter .guess-tile:nth-child(3) {
+        animation-delay: .15s;
+    }
+
+    .guess-result-enter .guess-tile:nth-child(4) {
+        animation-delay: .20s;
+    }
+
+    .guess-result-enter .guess-tile:nth-child(5) {
+        animation-delay: .25s;
+    }
+
+    .guess-result-enter .guess-tile:nth-child(6) {
+        animation-delay: .30s;
+    }
+
+    .guess-result-enter .guess-tile:nth-child(7) {
+        animation-delay: .35s;
+    }
+
+    .guess-result-enter .guess-tile:nth-child(8) {
+        animation-delay: .40s;
+    }
+
+    .guess-result-enter .guess-tile:nth-child(9) {
+        animation-delay: .45s;
+    }
+
+.guess-result-enter:has(.correct) {
+    animation: pokedex-row-enter .45s ease-out forwards, correct-flash .8s .45s ease-out;
+}
+
+@keyframes correct-flash {
+    0% {
+        filter: brightness(1);
+    }
+
+    50% {
+        filter: brightness(1.3);
+    }
+
+    100% {
+        filter: brightness(1);
+    }
+}
+
+@keyframes pokedex-cell-scan {
+    from {
+        opacity: 0;
+        transform: translateY(8px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}

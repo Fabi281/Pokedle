@@ -1,0 +1,147 @@
+﻿@page "/"
+
+@inject PokemonService PokemonService
+
+<MudCard Class="game-page">
+    <div class="pokedex-layout">
+        <div class="pokedex-main">
+            <div class="pokedex-header">
+                    <div class="top-panel">
+                        <div class="led-row">
+                            <div class="bigled blue" />
+                            <div class="small-leds">
+                                <div class="led red" />
+                                <div class="led yellow" />
+                                <div class="led green" />
+                            </div>
+
+                            <MudSpacer />
+
+                            <MudImage Style="margin-right: 8px;" Height="56" Width="56" Src="images/Pokeball.png" Fluid="true" />
+                        </div>
+                    </div>
+
+                <MudAutocomplete T="Pokemon"
+                                    Class="@($"pokedex-search {(IsOpen ? "autocomplete-open" : "")}")"
+                                    OpenChanged="AutocompleteOpenChanged"
+                                    @ref="MudAutocomplete"
+                                    Variant="Variant.Outlined"
+                                    Placeholder="Search Pokémon..."
+                                    SearchFunc="SearchPokemon"
+                                    ToStringFunc="@(p => p?.Name)"
+                                    CoerceValue="true"
+                                    ValueChanged="PokemonSelected"
+                                    Adornment="Adornment.Start" 
+                                    AdornmentIcon="@Icons.Material.Filled.CatchingPokemon"
+                                    AdornmentColor="Color.Primary"/>
+            </div>
+
+            <MudCardContent Class="pokedex-content">
+                <div class="guess-grid header">
+                    <div>Name</div>
+                    <div>1st Type</div>
+                    <div>2nd Type</div>
+                    <div>Highest Stat</div>
+                    <div>Stage</div>
+                    <div>Color</div>
+                    <div>Height</div>
+                    <div>Weight</div>
+                    <div>Generation</div>
+                </div>
+                <MudDivider Style="margin-bottom: 16px; border-color: black;" DividerType="DividerType.Middle" />
+
+                @foreach (var result in GuessResults)
+                {
+                    <div @key="result.Id" class="guess-grid guess-result-enter">
+                        @Cell(result.Guess.Name, result.Name)
+                        @Cell(result.Guess.PrimaryType, result.PrimaryType)
+                        @Cell(result.Guess.SecondaryType, result.SecondaryType)
+                        @Cell(string.Join(", ", result.Guess.HighestStatNames), result.HighestStatNames)
+                        @Cell(result.Guess.EvolutionStage.ToString(), result.EvolutionStage)
+                        @Cell(result.Guess.Color, result.Color)
+                        @Cell($"{result.Guess.Height} {Arrow(result.HeightDirection)}", result.Height)
+                        @Cell($"{result.Guess.Weight} {Arrow(result.WeightDirection)}", result.Weight)
+                        @Cell($"{result.Guess.Generation} {Arrow(result.GenerationDirection)}", result.Generation)
+                    </div>
+                }
+            </MudCardContent>
+        </div>
+
+        <div class="pokedex-hinge">
+            <div class="hinge-pin" />
+            <div class="hinge-groove" />
+            <div class="hinge-pin" />
+            <div class="hinge-groove" />
+            <div class="hinge-pin" />
+        </div>
+    </div>
+</MudCard>
+
+@code {
+
+    private MudAutocomplete<Pokemon> MudAutocomplete = null!;
+
+    private Pokemon TargetPokemon = null!;
+    private List<GuessResult> GuessResults = new();
+
+    private bool IsOpen;
+
+
+    protected override void OnInitialized()
+    {
+        TargetPokemon = GetRandomPokemon();
+        base.OnInitialized();
+    }
+
+    private void AutocompleteOpenChanged(bool open) => IsOpen = open;
+
+    public Pokemon GetRandomPokemon()
+    {
+        var random = new Random();
+        var randomId = random.Next(1, 1026);
+
+        return PokemonService.ByDexNumber[randomId];
+    }
+
+    private async Task<IEnumerable<Pokemon>> SearchPokemon(string value, CancellationToken token)
+    {
+        await Task.Delay(5, token);
+
+        if (string.IsNullOrWhiteSpace(value))
+            return PokemonService.All.Take(10);
+
+        return PokemonService.All
+            .Where(x => x.Name.Contains(value, StringComparison.OrdinalIgnoreCase))
+            .Take(10);
+    }
+
+    private async Task PokemonSelected(Pokemon? guess)
+    {
+        if (guess == null) return;
+
+        GuessResults.Insert(0, GuessResult.Compare(TargetPokemon, guess));
+
+        await MudAutocomplete.ClearAsync();
+    }
+
+    private string StateClass(MatchState state) => state switch
+        {
+            MatchState.Correct => "correct",
+            MatchState.Partial => "partial",
+            _ => "wrong"
+        };
+
+    private string Arrow(int direction)
+    {
+        if (direction > 0) return "▲";
+        if (direction < 0) return "▼";
+        return "";
+    }
+
+    RenderFragment Cell(string text, MatchState state) =>
+        @<MudPaper Elevation="2" Class="@($"guess-tile {StateClass(state)}")">
+            <MudText Typo="Typo.body2">
+                @text
+            </MudText>
+        </MudPaper>;
+}

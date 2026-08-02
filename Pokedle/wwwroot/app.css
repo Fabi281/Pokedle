@@ -1,0 +1,7 @@
+﻿body {
+    background-image: url("/images/Eevee.png");
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    overflow-x: hidden;
+}

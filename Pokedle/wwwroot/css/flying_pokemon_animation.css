@@ -1,0 +1,165 @@
+﻿.pidgey {
+    width: 38px;
+    height: 35px;
+    background: url("/images/PidgeySprites.png") no-repeat;
+    animation: pidgey-flap 1s steps(3) infinite, var(--movement);
+    overflow-x: hidden;
+    position: absolute;
+}
+
+@keyframes pidgey-flap {
+    from {
+        background-position: 0 0;
+    }
+
+    to {
+        background-position: -117px 0;
+    }
+}
+
+.zubat {
+    width: 60px;
+    height: 60px;
+    background: url("/images/Zubat.png") no-repeat;
+    animation: zubat-flap 1s steps(4) infinite, var(--movement);
+    overflow-x: hidden;
+    position: absolute;
+}
+
+@keyframes zubat-flap {
+    from {
+        background-position: 0 0;
+    }
+
+    to {
+        background-position: -240px 0;
+    }
+}
+
+.butterfree {
+    width: 70px;
+    height: 70px;
+    background: url("/images/Butterfree.png") no-repeat;
+    animation: butterfree-flap 1s steps(5) infinite, var(--movement);
+    overflow-x: hidden;
+    position: absolute;
+}
+
+@keyframes butterfree-flap {
+    from {
+        background-position: 0 0;
+    }
+
+    to {
+        background-position: -350px 0;
+    }
+}
+
+.spearow {
+    width: 60px;
+    height: 53px;
+    background: url("/images/Spearow.png") no-repeat;
+    animation: spearow-flap 1s steps(4) infinite, var(--movement);
+    overflow-x: hidden;
+    position: absolute;
+}
+
+@keyframes spearow-flap {
+    from {
+        background-position: 0 0;
+    }
+
+    to {
+        background-position: -240px 0;
+    }
+}
+
+.articuno {
+    width: 65px;
+    height: 68px;
+    background: url("/images/Articuno.png") no-repeat;
+    animation: articuno-flap 1s steps(3) infinite, var(--movement);
+    overflow-x: hidden;
+    position: absolute;
+}
+
+@keyframes articuno-flap {
+    from {
+        background-position: 0 0;
+    }
+
+    to {
+        background-position: -195px 0;
+    }
+}
+
+
+.zapdos {
+    width: 45px;
+    height: 52px;
+    background: url("/images/zapdos.png") no-repeat;
+    animation: zapdos-flap 1s steps(3) infinite, var(--movement);
+    overflow-x: hidden;
+    position: absolute;
+}
+
+@keyframes zapdos-flap {
+    from {
+        background-position: 0 0;
+    }
+
+    to {
+        background-position: -135px 0;
+    }
+}
+
+.moltres {
+    width: 65px;
+    height: 62px;
+    background: url("/images/moltres.png") no-repeat;
+    animation: moltres-flap 1s steps(3) infinite, var(--movement);
+    overflow-x: hidden;
+    position: absolute;
+}
+
+@keyframes moltres-flap {
+    from {
+        background-position: 0 0;
+    }
+
+    to {
+        background-position: -195px 0;
+    }
+}
+
+.fly-left {
+    --movement: fly-left var(--duration) linear forwards;
+    --flip: 1;
+}
+
+.fly-right {
+    --movement: fly-right var(--duration) linear forwards;
+    --flip: -1;
+}
+
+@keyframes fly-left {
+
+    from {
+        transform: translateX(calc(100vw + 150px)) scale(calc(var(--scale) * var(--flip)), var(--scale));
+    }
+
+    to {
+        transform: translateX(-150px) scale(calc(var(--scale) * var(--flip)), var(--scale));
+    }
+}
+
+@keyframes fly-right {
+
+    from {
+        transform: translateX(-150px) scale(calc(var(--scale) * var(--flip)), var(--scale));
+    }
+
+    to {
+        transform: translateX(calc(100vw + 150px)) scale(calc(var(--scale) * var(--flip)), var(--scale));
+    }
+}

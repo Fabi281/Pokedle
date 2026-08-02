@@ -1,0 +1,63 @@
+﻿@using System.Globalization;
+
+@inherits LayoutComponentBase
+@inject FlyingPokemonService FlyingPokemonService
+
+<MudThemeProvider Theme="@_theme" CurrentPalette="_lightPalette" />
+<MudPopoverProvider @rendermode="InteractiveServer" />
+<MudDialogProvider @rendermode="InteractiveServer" />
+
+<MudLayout>
+    <MudMainContent Class="pt-16 pa-4">
+        @foreach (var pokemon in FlyingPokemonService.ActivePokemon)
+        {
+            <div @key="pokemon.Id" class="@GetClass(pokemon)"
+                 style="top: @($"{pokemon.Top.ToString(CultureInfo.InvariantCulture)}%");
+                        --duration: @($"{pokemon.Definition.Duration.TotalSeconds.ToString(CultureInfo.InvariantCulture)}s");
+                        --scale: @pokemon.Definition.Scale.ToString(CultureInfo.InvariantCulture);" />
+        }
+
+        <MudGrid Justify="Justify.Center" Class="mt-4">
+            <MudContainer Class="py-6" Spacing="0">
+                @Body
+            </MudContainer>
+        </MudGrid>
+    </MudMainContent>
+</MudLayout>
+
+@code {
+    private MudTheme? _theme = null;
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+
+        _theme = new()
+        {
+            PaletteLight = _lightPalette,
+            LayoutProperties = new LayoutProperties()
+        };
+
+        FlyingPokemonService.Changed += Refresh;
+
+    }
+
+    private void Refresh() => InvokeAsync(StateHasChanged);
+
+    private static string GetClass(AnimatedPokemon pokemon)
+    {
+        return pokemon.Direction == FlightDirection.Left
+            ? $"{pokemon.Definition.CssClass} fly-left"
+            : $"{pokemon.Definition.CssClass} fly-right";
+    }
+
+    private readonly PaletteLight _lightPalette = new()
+    {
+        Primary = "#D32F2F",         
+    };
+
+    public void Dispose()
+    {
+        FlyingPokemonService.Changed -= Refresh;
+    }
+}
