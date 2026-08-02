@@ -1,7 +1,9 @@
 <Solution>
   <Folder Name="/Solution Items/">
+    <File Path=".dockerignore" />
     <File Path=".gitattributes" />
     <File Path=".gitignore" />
+    <File Path="Pokedle/Dockerfile" />
   </Folder>
   <Project Path="Pokedle/Pokedle.csproj" />
 </Solution>
